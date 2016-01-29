@@ -5,11 +5,35 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hello</title>
+<title>User's Interface</title>
+<style>
+table{
+border: 2px solid black;
+}
+body{
+background-color:  #f2f2f2;
+}
+</style>
 </head>
 <body>
-${message}
-
+<table>
+<tr>
+<td><a href="/InternetAssignment/">Home</a></td>
+<td><a href="/InternetAssignment/login">Log In</a></td>
+<td><a href="/InternetAssignment/helloworld">Profile</a></td>
+<td><a href="/InternetAssignment/info">Info</a></td>
+<td><a href="/InternetAssignment/events">Events</a></td>
+</tr>
+</table>
+<p>
+User's Interface
+</p>
+<p><a href="/InternetAssignment/">Request Appointment</a>
+</p>
+<p>Check Your Appointment
+</p>
+<p>
+</p>
 
 <c:url value="/j_spring_security_logout" var="logoutUrl" />
 <a href="${logoutUrl}">Log Out</a>
