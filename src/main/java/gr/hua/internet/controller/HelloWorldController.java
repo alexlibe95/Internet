@@ -36,7 +36,7 @@ import gr.hua.internet.controller.model.Request;
 
 @Controller
 public class HelloWorldController {
-	public static final String SERVER_URI = "http://localhost:8080/SpringSecurityHelloWorlExample/";
+	public static final String SERVER_URI = "http://localhost:10299/SpringSecurityHelloWorlExample/";
 
 	
 	
@@ -209,5 +209,91 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 
 }
 */
+ 	@RequestMapping(value = "/Request_Appointment", method = RequestMethod.GET)
+	public String app(Model model) {
+		Appointment newAppointment = new Appointment();
+		model.addAttribute("newappointment", newAppointment);
+		return "request_appointment";
+	}
+ 
+ 	@RequestMapping(value = "/addappointment", method = RequestMethod.POST)
+	public ModelAndView addAppointment(@ModelAttribute("newappointment")Appointment appointment,HttpServletRequest request) throws SQLException {
+		
+		ModelAndView model = new ModelAndView();
+		try {
+			RestTemplate restTemplate = new RestTemplate();
 
+			MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+			String amka = Integer.toString(appointment.getAmka());
+			parameters.add("amka", amka);
+			parameters.add("name", appointment.getName());
+			parameters.add("surname", appointment.getSurname());
+			parameters.add("tameio", appointment.getTameio());
+			parameters.add("ejetash", appointment.getEjetash());
+			String eme = Integer.toString(appointment.getEmergency());
+
+			parameters.add("emergency", eme);
+			
+			
+			Appointment response = restTemplate.postForObject(SERVER_URI + "req_appointment/add", parameters,
+					Appointment.class);
+
+			System.out.println("Response  " + response.getName());
+
+			
+		
+		 	request.setAttribute("newappointment", appointment.getAmka());
+			model = new ModelAndView("redirect:/helloworld");
+		} catch (HttpClientErrorException e) {
+
+			System.out.println("error:  " + e.getResponseBodyAsString());
+
+		} catch (Exception e) {
+			System.out.println("error:  " + e.getMessage());
+		}
+		return model;
+	
+ 	}
+ 	
+ 	@RequestMapping(value = "/Check_Appointment", method = RequestMethod.GET)
+	public String check(Model model) {
+		Appointment newAppointment = new Appointment();
+		model.addAttribute("check", newAppointment);
+		return "check";
+	}
+ 	
+
+ 	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	public ModelAndView CheckApp(@ModelAttribute("check")Appointment appointment,HttpServletRequest request) throws SQLException {
+		
+		ModelAndView model = new ModelAndView();
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+			String amka = Integer.toString(appointment.getAmka());
+			parameters.add("amka", amka);
+			
+			
+			
+			Appointment response = restTemplate.postForObject(SERVER_URI + "/req_appointment/" + amka, parameters,
+					Appointment.class);
+
+			System.out.println("Response  " + response.getName());
+
+			
+		
+		 	request.setAttribute("check", appointment.getAmka());
+			model = new ModelAndView("redirect:/helloworld");
+		} catch (HttpClientErrorException e) {
+
+			System.out.println("error:  " + e.getResponseBodyAsString());
+
+		} catch (Exception e) {
+			System.out.println("error:  " + e.getMessage());
+		}
+		return model;
+	
+ 	}
+ 	
 }

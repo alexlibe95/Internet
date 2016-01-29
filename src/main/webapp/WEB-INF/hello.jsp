@@ -25,12 +25,11 @@ background-color:  #f2f2f2;
 <td><a href="/InternetAssignment/events">Events</a></td>
 </tr>
 </table>
-<p>
-User's Interface
+<h1>User's Interface
+</h1>
+<p><a href="/InternetAssignment/Request_Appointment">Request Appointment</a>
 </p>
-<p><a href="/InternetAssignment/">Request Appointment</a>
-</p>
-<p>Check Your Appointment
+<p><a href="/InternetAssignment/Check_Appointment">Check Your Appointment</a>
 </p>
 <p>
 </p>

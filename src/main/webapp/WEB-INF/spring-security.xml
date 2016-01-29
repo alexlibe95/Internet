@@ -16,6 +16,10 @@
                         <intercept-url pattern="/signup" access="permitAll" />
                         <intercept-url pattern="/addRequest" access="permitAll" />
             
+            <intercept-url pattern="/Request_Appointment" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+            <intercept-url pattern="/addappointment" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+            <intercept-url pattern="/Check_Appointment" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+            <intercept-url pattern="/check" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
       
       <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')" />
       <intercept-url pattern="/helloworld" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
