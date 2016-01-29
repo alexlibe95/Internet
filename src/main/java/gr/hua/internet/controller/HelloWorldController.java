@@ -276,7 +276,7 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 			
 			
 			
-			Appointment response = restTemplate.postForObject(SERVER_URI + "/req_appointment/" + amka, parameters,
+			Appointment response = restTemplate.postForObject(SERVER_URI + "/req_appointment/", parameters,
 					Appointment.class);
 
 			System.out.println("Response  " + response.getName());
