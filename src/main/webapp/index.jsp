@@ -26,7 +26,7 @@ background-color:  #f2f2f2;
 <td><a href="/InternetAssignment/login">Log In</a></td>
 <td><a href="/InternetAssignment/helloworld">Profile</a></td>
 <td><a href="/InternetAssignment/info">Info</a></td>
-<td><a href="/InternetAssignment/events">Events</a></td>
+<td><a href="/InternetAssignment/allevents">Events</a></td>
 </tr>
 </table>
 

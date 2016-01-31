@@ -28,7 +28,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import gr.hua.internet.controller.model.Appointment;
+import gr.hua.internet.controller.model.ReqApp;
 import gr.hua.internet.controller.model.Email;
 import gr.hua.internet.controller.model.Event;
 import gr.hua.internet.controller.model.Request;
@@ -62,14 +62,15 @@ public class HelloWorldController {
   return new ModelAndView("info");
  }
  
- @RequestMapping(value = "/events", method = RequestMethod.GET)
+ //Error at view
+	@RequestMapping(value = "/allevents", method = RequestMethod.GET)
 	public String allEvents(Locale locale, Model model) throws JsonParseException, JsonMappingException, IOException {
 		RestTemplate restTemplate = new RestTemplate();
 
 		Event[] events = restTemplate.getForObject(SERVER_URI + "allevents", Event[].class);
 
 		
-		model.addAttribute("events", events);
+		model.addAttribute("event", events);
 
 		System.out.println(Arrays.asList(events).size());
 		
@@ -96,10 +97,9 @@ public class HelloWorldController {
 	    System.out.println(out.getStatusCode());
 
 		return "events";
-	
+	}
  
-}
- 
+
  @RequestMapping(value = "/newsletter", method = RequestMethod.GET)
 	public String newsletter(Model model) {
 		Email newEmail = new Email();
@@ -117,12 +117,11 @@ public class HelloWorldController {
 			parameters.add("name", eml.getName());
 			parameters.add("email", eml.getEmail());
 
-			Email response = restTemplate.postForObject(SERVER_URI + "Email/addparam", parameters,
+			Email response = restTemplate.postForObject(SERVER_URI + "emails/addparam", parameters,
 					Email.class);
 
 			System.out.println("Response  " + response.getName());
 
-			
 		} catch (HttpClientErrorException e) {
 
 			System.out.println("error:  " + e.getResponseBodyAsString());
@@ -130,7 +129,7 @@ public class HelloWorldController {
 		} catch (Exception e) {
 			System.out.println("error:  " + e.getMessage());
 		}
-		return "redirect:/helloworld";
+		return "redirect:/";
 	}
  
  @RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -154,7 +153,7 @@ public class HelloWorldController {
 			parameters.add("email", req.getEmail());
 			
 			
-Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", parameters,
+			Request response = restTemplate.postForObject(SERVER_URI + "request/addparam", parameters,
 					Request.class);
 
 			System.out.println("Response  " + response.getName());
@@ -170,54 +169,16 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 		return "redirect:/";
 	}
  
- /*
- @RequestMapping(value = "/myapp", method = RequestMethod.GET)
-	public String myapp(Locale locale, Model model) throws JsonParseException, JsonMappingException, IOException {
-		RestTemplate restTemplate = new RestTemplate();
-
-		Appointment[] events = restTemplate.getForObject(SERVER_URI + "allevents", Appointment[].class);
-
-		
-		model.addAttribute("events", events);
-
-		System.out.println(Arrays.asList(events).size());
-		
-		//and do I need this JSON media type for my use case?
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_JSON);
-
-	    //set my entity
-	    HttpEntity<Object> entity = new HttpEntity<Object>(headers);
-
-	    ResponseEntity<String> out = restTemplate.exchange(SERVER_URI + "allevents", HttpMethod.GET, entity, String.class);
-
-	    
-	
-	    ObjectMapper mapper = new ObjectMapper();
-	    //JSON from URL to Object
-	    Event[] evtss = mapper.readValue(out.getBody(), Event[].class);
-
-		System.out.println("------" + Arrays.asList(evtss).size());
-
-	   
-
-	    System.out.println(out.getBody());
-	    System.out.println(out.getStatusCode());
-
-		return "events";
-	
-
-}
-*/
+ 
  	@RequestMapping(value = "/Request_Appointment", method = RequestMethod.GET)
 	public String app(Model model) {
-		Appointment newAppointment = new Appointment();
+		ReqApp newAppointment = new ReqApp();
 		model.addAttribute("newappointment", newAppointment);
 		return "request_appointment";
 	}
  
  	@RequestMapping(value = "/addappointment", method = RequestMethod.POST)
-	public ModelAndView addAppointment(@ModelAttribute("newappointment")Appointment appointment,HttpServletRequest request) throws SQLException {
+	public ModelAndView addAppointment(@ModelAttribute("newappointment")ReqApp appointment,HttpServletRequest request) throws SQLException {
 		
 		ModelAndView model = new ModelAndView();
 		try {
@@ -231,19 +192,16 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 			parameters.add("tameio", appointment.getTameio());
 			parameters.add("ejetash", appointment.getEjetash());
 			String eme = Integer.toString(appointment.getEmergency());
-
 			parameters.add("emergency", eme);
 			
 			
-			Appointment response = restTemplate.postForObject(SERVER_URI + "req_appointment/add", parameters,
-					Appointment.class);
+			ReqApp response = restTemplate.postForObject(SERVER_URI + "req_appoinement/addparam", parameters,
+					ReqApp.class);
 
 			System.out.println("Response  " + response.getName());
 
 			
-		
-		 	request.setAttribute("newappointment", appointment.getAmka());
-			model = new ModelAndView("redirect:/helloworld");
+			
 		} catch (HttpClientErrorException e) {
 
 			System.out.println("error:  " + e.getResponseBodyAsString());
@@ -251,20 +209,22 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 		} catch (Exception e) {
 			System.out.println("error:  " + e.getMessage());
 		}
+		model = new ModelAndView("redirect:/helloworld");
+		
 		return model;
 	
  	}
  	
  	@RequestMapping(value = "/Check_Appointment", method = RequestMethod.GET)
 	public String check(Model model) {
-		Appointment newAppointment = new Appointment();
+		ReqApp newAppointment = new ReqApp();
 		model.addAttribute("check", newAppointment);
 		return "check";
 	}
  	
-
+ 	//Its not working
  	@RequestMapping(value = "/check", method = RequestMethod.POST)
-	public ModelAndView CheckApp(@ModelAttribute("check")Appointment appointment,HttpServletRequest request) throws SQLException {
+	public ModelAndView CheckApp(@ModelAttribute("check")ReqApp appointment,HttpServletRequest request) throws SQLException {
 		
 		ModelAndView model = new ModelAndView();
 		try {
@@ -276,15 +236,39 @@ Request response = restTemplate.postForObject(SERVER_URI + "Request/addparam", p
 			
 			
 			
-			Appointment response = restTemplate.postForObject(SERVER_URI + "/req_appointment/", parameters,
-					Appointment.class);
+			ReqApp response = restTemplate.postForObject(SERVER_URI + "req_appointment", parameters,
+					ReqApp.class);
 
 			System.out.println("Response  " + response.getName());
 
 			
 		
-		 	request.setAttribute("check", appointment.getAmka());
-			model = new ModelAndView("redirect:/helloworld");
+		 	request.setAttribute("check",response);
+		 	
+			//and do I need this JSON media type for my use case?
+		    HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.APPLICATION_JSON);
+
+		    //set my entity
+		    HttpEntity<Object> entity = new HttpEntity<Object>(headers);
+
+		    ResponseEntity<String> out = restTemplate.exchange(SERVER_URI + "req_appointment", HttpMethod.GET, entity, String.class);
+
+		
+		    ObjectMapper mapper = new ObjectMapper();
+		    //JSON from URL to Object
+		    ReqApp empss = mapper.readValue(out.getBody(), ReqApp.class);
+
+			System.out.println("------" + Arrays.asList(empss).size());
+
+		   
+
+		    System.out.println(out.getBody());
+		    System.out.println(out.getStatusCode());
+		 	
+		    
+			model = new ModelAndView("checker");
+			
 		} catch (HttpClientErrorException e) {
 
 			System.out.println("error:  " + e.getResponseBodyAsString());
