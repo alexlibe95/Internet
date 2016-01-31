@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -178,9 +179,14 @@ public class HelloWorldController {
 	}
  
  	@RequestMapping(value = "/addappointment", method = RequestMethod.POST)
-	public ModelAndView addAppointment(@ModelAttribute("newappointment")ReqApp appointment,HttpServletRequest request) throws SQLException {
+	public ModelAndView addAppointment(@ModelAttribute("newappointment")@Valid ReqApp appointment, BindingResult result,HttpServletRequest request) throws SQLException {
 		
 		ModelAndView model = new ModelAndView();
+		if (result.hasErrors()) {
+			model = new ModelAndView("request_appointment");
+			return model;
+		}
+		
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
